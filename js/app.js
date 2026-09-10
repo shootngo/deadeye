@@ -775,7 +775,7 @@ function regsBagsHtml() {
     <div class="regs-glance">
       <div class="regs-stat"><div class="n">${n.privateNorthCentralSeason}</div><div class="l">Private North Central: ${n.privateNorthCentralSeason}/season. No daily limit in ${n.noDailyLimitUnits.join(", ")}</div></div>
       <div class="regs-stat"><div class="n">${n.privateStatewideSeason}</div><div class="l">Private statewide default (Hills / Delta): ${n.privateStatewideSeason}/season</div></div>
-      <div class="regs-stat wide"><div class="n">USFS ${n.usfsDaily}/day · ${n.usfsSeason}/yr</div><div class="l">National Forests including Holly Springs: ${n.usfsDaily}/day, max ${n.usfsSeason}/season (Southeast unit is ${n.usfsSoutheastSeason} — not Frank’s focus)</div></div>
+      <div class="regs-stat wide"><div class="n">USFS ${n.usfsDaily}/day · ${n.usfsSeason}/yr</div><div class="l">National Forests including Holly Springs: ${n.usfsDaily}/day, max ${n.usfsSeason}/season (Southeast unit is ${n.usfsSoutheastSeason} — not Frank and Leo’s focus)</div></div>
     </div>
   `;
 }
@@ -826,7 +826,7 @@ function regsUsfsHtml() {
 
 function regsCwdHtml() {
   return `
-    <p class="lede">${esc(CWD.zoneName)} covers Frank’s North MS counties. Carcass and feed rules are statewide for this zone — not HSNF-only.</p>
+    <p class="lede">${esc(CWD.zoneName)} covers Frank and Leo’s North MS counties. Carcass and feed rules are statewide for this zone — not HSNF-only.</p>
     <h3 class="section-label">Whole counties</h3>
     <div class="county-wrap">${CWD.wholeCounties.map((c) => `<span class="badge">${esc(c)}</span>`).join("")}</div>
     <h3 class="section-label">Defined portions only</h3>
@@ -888,7 +888,7 @@ function renderAbout() {
     <p class="kicker">Deadeye</p>
     <h2 class="page-title">Sight-in logger</h2>
     <div class="prose">
-      <p><strong>Deadeye</strong> is a phone-first hunting sight-in / scope-zero logger for Frank Mulkey. Crossbows, rifles, and red dots. Multi-scope profiles, range sessions with an optional target photo, a documents pocket for a hunting license and land permits, and a static <strong>Local regs</strong> card for Holly Springs NF / North Mississippi.</p>
+      <p><strong>Deadeye</strong> is a phone-first hunting sight-in / scope-zero logger for Frank Mulkey and Leo Mulkey. Crossbows, rifles, and red dots. Multi-scope profiles, range sessions with an optional target photo, a documents pocket for a hunting license and land permits, and a static <strong>Local regs</strong> card for Holly Springs NF / North Mississippi.</p>
       <h2>Data stays on this device</h2>
       <p>Profiles and notes live in this browser’s storage. Photos and PDFs live in IndexedDB on the phone. There is no account, no cloud sync, no share sheet, and no public link. Local regs are baked into the app shell — not live sync.</p>
       <h2>Documents pocket</h2>
