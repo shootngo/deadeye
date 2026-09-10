@@ -1,0 +1,9 @@
+{
+  "name": "deadeye",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node tests/hints.test.js",
+    "start": "python3 -m http.server 8080"
+  }
+}

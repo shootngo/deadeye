@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Deadeye</title>
+  <meta name="description" content="Phone-first hunting sight-in and scope-zero logger for crossbows, rifles, and red dots. Local-first, no sharing.">
+  <meta name="theme-color" content="#161616">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Deadeye">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="favicon-48.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="apple-touch-startup-image" href="splash.png">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <div id="splash">
+    <img src="splash.jpg" alt="Deer skull in blaze-orange crosshairs">
+    <div class="enter-wrap">
+      <div class="brand">Deadeye</div>
+      <div class="tag">Sight-in logger · on-device</div>
+      <button type="button" class="enter" id="splash-enter">Enter</button>
+    </div>
+  </div>
+
+  <div class="app">
+    <header class="header">
+      <button type="button" class="icon-btn hidden" id="btn-back" aria-label="Back">←</button>
+      <img class="logo" src="icon-192.png" alt="" width="44" height="44">
+      <div class="grow">
+        <h1 id="header-title">Deadeye</h1>
+        <p class="sub" id="header-sub">Sight-in / scope zero</p>
+      </div>
+      <button type="button" class="icon-btn" id="btn-menu" aria-label="Menu">☰</button>
+    </header>
+
+    <div id="menu" class="menu hidden">
+      <a href="#/">Scopes</a>
+      <a href="#/sessions">Range sessions</a>
+      <a href="#/docs">Documents pocket</a>
+      <a href="#/about">About &amp; privacy</a>
+    </div>
+
+    <div id="install-bar" class="install-bar hidden">
+      <p>Install Deadeye on this phone for offline range use.</p>
+      <button type="button" id="btn-install">Install</button>
+    </div>
+
+    <main id="view" class="view"></main>
+  </div>
+
+  <nav class="tabs" aria-label="Primary">
+    <a href="#/" id="tab-home"><span class="ico">◎</span>Scopes</a>
+    <a href="#/sessions" id="tab-sessions"><span class="ico">▣</span>Sessions</a>
+    <a href="#/docs" id="tab-docs"><span class="ico">▤</span>Pocket</a>
+  </nav>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
