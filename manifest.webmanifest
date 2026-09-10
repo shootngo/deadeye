@@ -1,0 +1,27 @@
+{
+  "id": "/deadeye/",
+  "name": "Deadeye",
+  "short_name": "Deadeye",
+  "description": "Hunting sight-in and scope-zero logger for crossbows, rifles, and red dots. Local-first. No sharing.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#161616",
+  "theme_color": "#161616",
+  "lang": "en",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
