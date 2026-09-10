@@ -12,6 +12,7 @@ Deadeye keeps **crossbow**, **rifle**, and **red-dot** zeros on the phone you ta
 - **Traditional zeroing hints** — conventional ladders by optic type (crossbow 20–60, rifle BDC-style 100–500, red-dot 50-yard POA). Labeled **suggested**. You can override every number; nothing is forced
 - **Range sessions** — date, bolt or load, notes, optional target photo, linked to a profile. The zeros/dots used that day are snapshotted on the session
 - **Documents pocket** — hunting license and land permits only (e.g. Butler Lake). Photo or PDF, local-first. **No driver’s license / wallet IDs**
+- **Local regs** — static **2026–2027** North Mississippi / Holly Springs NF field card (bag limits, HSNF vs open public seasons, USFS woods rules, CWD North MS zone, nearby WMA pointers). Unofficial summary baked into the app; verify MDWFP + USFS. **No live sync, no sharing**
 - **No in-app sharing** — no share sheets, no public links, no export-to-social
 
 Branding: bone-white deer skull in blaze-orange crosshairs, dots on the vertical post, charcoal background.
@@ -38,7 +39,7 @@ Open `http://localhost:8080/`.
 4. **Branch:** `main` · **folder:** `/ (root)`.
 5. Save. First publish takes a minute. `404.html` and `.nojekyll` are already in the root.
 
-PWA `start_url` / `scope` are relative (`./`), so Add to Home Screen works on that Pages path. App `id` is `/deadeye/` so it will not collide with Nickey, Nestor, Stashr, or Buck and Bacon. Service worker cache is `deadeye-v1`.
+PWA `start_url` / `scope` are relative (`./`), so Add to Home Screen works on that Pages path. App `id` is `/deadeye/` so it will not collide with Nickey, Nestor, Stashr, or Buck and Bacon. Service worker cache is `deadeye-v2`.
 
 On Android Chrome: menu → **Install app** / Add to Home screen. After the first visit the shell works offline.
 
@@ -53,11 +54,11 @@ Charcoal (`#161616`), blaze orange (`#FF6600`), bone (`#F3EDE3`). Icons: `favico
 ## Develop
 
 ```bash
-npm test          # traditional yardage-hint checks
+npm test          # yardage hints + North MS regs bag-limit checks
 python3 -m http.server 8080
 ```
 
-No build step. Vanilla HTML/CSS/ES modules, service worker `deadeye-v1`.
+No build step. Vanilla HTML/CSS/ES modules, service worker `deadeye-v2`. Static regs live in `js/regs-ms-north.js`.
 
 ## Phase 1 — parked, do not build here
 

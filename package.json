@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node tests/hints.test.js",
+    "test": "node tests/hints.test.js && node tests/regs-ms-north.test.js",
     "start": "python3 -m http.server 8080"
   }
 }

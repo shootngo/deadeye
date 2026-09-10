@@ -7,6 +7,24 @@ import {
   opticList,
 } from "./hints.js";
 import * as db from "./db.js";
+import {
+  SEASON_YEAR,
+  DISCLAIMER,
+  FOCUS,
+  SOURCES,
+  DMUS,
+  HOLLY_SPRINGS_DMU_NOTE,
+  BAGS,
+  DEER_SEASONS_NC_HILLS_DELTA,
+  SEASON_CARVEOUT_NOTE,
+  OPEN_PUBLIC_NOTE,
+  USFS_RULES,
+  USFS_ORDER_ID,
+  CWD,
+  NEARBY_LANDS,
+  SMALL_GAME,
+  SECTIONS,
+} from "./regs-ms-north.js";
 
 const viewEl = document.getElementById("view");
 const headerTitle = document.getElementById("header-title");
@@ -82,8 +100,9 @@ function setHeader(title, sub, showBack) {
 }
 
 function setTab(which) {
-  for (const id of ["tab-home", "tab-sessions", "tab-docs"]) {
-    document.getElementById(id).classList.toggle("active", id === `tab-${which}`);
+  for (const id of ["tab-home", "tab-sessions", "tab-docs", "tab-regs"]) {
+    const el = document.getElementById(id);
+    if (el) el.classList.toggle("active", id === `tab-${which}`);
   }
 }
 
@@ -616,6 +635,251 @@ async function renderDocDetail(id) {
   `;
 }
 
+function seasonBanner(compact) {
+  return `<div class="season-banner${compact ? " compact" : ""}">
+    <p class="kicker">Season year</p>
+    <p class="year">${esc(SEASON_YEAR)}</p>
+    ${compact ? "" : `<p class="where">${esc(FOCUS.title)}</p>`}
+  </div>`;
+}
+
+function regsDisclaimer() {
+  return `<div class="warn-banner"><strong>Field reference only.</strong> ${esc(DISCLAIMER)}</div>`;
+}
+
+function sourceLinks() {
+  return `<div class="source-list">${SOURCES.map(
+    (s) =>
+      `<a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">${esc(s.label)}<span>Opens in browser · verify here</span></a>`,
+  ).join("")}</div>`;
+}
+
+function renderRegsHub() {
+  setHeader("Local regs", "North Mississippi · on-device", false);
+  setTab("regs");
+  const { antlered, antlerless } = BAGS;
+  viewEl.innerHTML = `
+    ${seasonBanner(false)}
+    ${regsDisclaimer()}
+    <p class="lede">${esc(FOCUS.lede)}</p>
+    <div class="regs-glance">
+      <div class="regs-stat">
+        <div class="n">${antlered.northCentralSeason} / ${antlered.hollySpringsNorthCentralSeason}</div>
+        <div class="l">NC bucks: ${antlered.northCentralSeason} private/open public · ${antlered.hollySpringsNorthCentralSeason} on HSNF in North Central</div>
+      </div>
+      <div class="regs-stat">
+        <div class="n">${antlerless.usfsDaily} / ${antlerless.usfsSeason}</div>
+        <div class="l">HSNF antlerless: ${antlerless.usfsDaily}/day, max ${antlerless.usfsSeason}/season</div>
+      </div>
+      <div class="regs-stat wide">
+        <div class="n">CWD zone</div>
+        <div class="l">No carcass out of the North MS zone. Supplemental feeding banned.</div>
+      </div>
+    </div>
+    <h3 class="section-label">Reference cards</h3>
+    <div class="card-list">${SECTIONS.map(
+      (s) => `<a class="card" href="#/regs/${esc(s.id)}">
+        <div class="name">${esc(s.title)}</div>
+        <div class="meta">${esc(s.blurb)}</div>
+      </a>`,
+    ).join("")}</div>
+    <h3 class="section-label">Verify (browser)</h3>
+    <p class="lede">All text above is stored in the app. These links are only to confirm current MDWFP and USFS rules.</p>
+    ${sourceLinks()}
+  `;
+}
+
+function landCells(row) {
+  return `<div class="land-grid">
+    <div class="land-cell"><div class="who">Private</div><div class="what">${esc(row.private)}</div></div>
+    <div class="land-cell"><div class="who">Open public</div><div class="what">${esc(row.openPublic)}</div></div>
+    <div class="land-cell hsnf"><div class="who">Holly Springs NF</div><div class="what">${esc(row.hollySprings)}</div></div>
+  </div>`;
+}
+
+function renderRegsSection(id) {
+  setTab("regs");
+  const section = SECTIONS.find((s) => s.id === id);
+  if (!section) {
+    renderRegsHub();
+    return;
+  }
+  setHeader(section.title, `${SEASON_YEAR} · North MS`, true);
+  let body = "";
+  if (id === "dmu") body = regsDmuHtml();
+  else if (id === "bags") body = regsBagsHtml();
+  else if (id === "seasons") body = regsSeasonsHtml();
+  else if (id === "usfs") body = regsUsfsHtml();
+  else if (id === "cwd") body = regsCwdHtml();
+  else if (id === "lands") body = regsLandsHtml();
+  else if (id === "small") body = regsSmallHtml();
+
+  viewEl.innerHTML = `
+    ${seasonBanner(true)}
+    ${regsDisclaimer()}
+    <p class="kicker">${esc(FOCUS.title)}</p>
+    <h2 class="page-title">${esc(section.title)}</h2>
+    ${body}
+    <h3 class="section-label">Verify (browser)</h3>
+    ${sourceLinks()}
+    <div class="actions">
+      <button type="button" class="primary secondary" data-go="#/regs">All local regs</button>
+    </div>
+  `;
+}
+
+function regsDmuHtml() {
+  const nc = DMUS.northCentral;
+  const hills = DMUS.hills;
+  return `
+    <p class="lede">${esc(HOLLY_SPRINGS_DMU_NOTE)}</p>
+    <div class="card rule-card">
+      <div class="badges"><span class="badge">${esc(nc.name)}</span></div>
+      <h3>Legal buck</h3>
+      <p>${esc(nc.legalBuck)}</p>
+      <div class="county-wrap">${nc.counties.map((c) => `<span class="badge quiet">${esc(c)}</span>`).join("")}</div>
+    </div>
+    <div class="card rule-card stack-gap">
+      <div class="badges"><span class="badge">${esc(hills.name)}</span></div>
+      <h3>Legal buck</h3>
+      <p>${esc(hills.legalBuck)}</p>
+      <p style="margin-top:8px">${esc(hills.countiesNote)}</p>
+    </div>
+    <div class="hint-box">
+      <p class="kicker">Where you stand</p>
+      <h3>HSNF is not one DMU</h3>
+      <p>Benton / Marshall / Tippah forest = North Central table (any hardened antler). Other Holly Springs acres outside those NC counties = Hills table (10″ spread or 13″ beam).</p>
+    </div>
+  `;
+}
+
+function regsBagsHtml() {
+  const a = BAGS.antlered;
+  const n = BAGS.antlerless;
+  return `
+    <h3 class="section-label">Antlered bucks</h3>
+    <div class="regs-glance">
+      <div class="regs-stat"><div class="n">${a.statewideDaily} / ${a.statewideSeason}</div><div class="l">Statewide default: ${a.statewideDaily}/day, ${a.statewideSeason}/season</div></div>
+      <div class="regs-stat"><div class="n">${a.northCentralSeason}</div><div class="l">North Central private / open public: ${a.northCentralDaily}/day, ${a.northCentralSeason}/season, no antler restrictions</div></div>
+      <div class="regs-stat wide"><div class="n">HSNF in NC = ${a.hollySpringsNorthCentralSeason}</div><div class="l">Holly Springs NF inside North Central DMU: ${a.northCentralDaily}/day, ${a.hollySpringsNorthCentralSeason}/season — not ${a.northCentralSeason}</div></div>
+    </div>
+    <div class="card rule-card">
+      <h3>Statewide “any antlered” exception</h3>
+      <p>Outside the NC no-restriction rule: ${a.statewideDaily}/day, ${a.statewideSeason}/season. One of those ${a.statewideSeason} may be any antlered buck on private land and on Holly Springs NF. Hills (and other unit) antler criteria still apply to the other two.</p>
+    </div>
+    <div class="card rule-card stack-gap">
+      <h3>Velvet archery</h3>
+      <p>Only ${a.velvetArcheryBucks} legal buck during the September velvet period. It counts toward the annual bag.</p>
+    </div>
+    <h3 class="section-label">Antlerless</h3>
+    <div class="regs-glance">
+      <div class="regs-stat"><div class="n">${n.privateNorthCentralSeason}</div><div class="l">Private North Central: ${n.privateNorthCentralSeason}/season. No daily limit in ${n.noDailyLimitUnits.join(", ")}</div></div>
+      <div class="regs-stat"><div class="n">${n.privateStatewideSeason}</div><div class="l">Private statewide default (Hills / Delta): ${n.privateStatewideSeason}/season</div></div>
+      <div class="regs-stat wide"><div class="n">USFS ${n.usfsDaily}/day · ${n.usfsSeason}/yr</div><div class="l">National Forests including Holly Springs: ${n.usfsDaily}/day, max ${n.usfsSeason}/season (Southeast unit is ${n.usfsSoutheastSeason} — not Frank’s focus)</div></div>
+    </div>
+  `;
+}
+
+function regsSeasonsHtml() {
+  const rows = DEER_SEASONS_NC_HILLS_DELTA.filter((r) => r.id !== "velvet-archery")
+    .map(
+      (r) => `<div class="card season-card">
+        <div class="badges"><span class="badge">${esc(r.dates)}</span></div>
+        <div class="name">${esc(r.method)}</div>
+        ${landCells(r)}
+      </div>`,
+    )
+    .join("");
+  const velvet = DEER_SEASONS_NC_HILLS_DELTA.find((r) => r.id === "velvet-archery");
+  return `
+    <p class="lede">${esc(OPEN_PUBLIC_NOTE)}</p>
+    <div class="hint-box">
+      <p class="kicker">Read the HSNF column</p>
+      <h3>Holly Springs is often either-sex when other open public is bucks only</h3>
+      <p>Gun-with-dogs, gun-without-dogs, and late archery/primitive: either-sex on private and HSNF; legal bucks only on other open public.</p>
+    </div>
+    <h3 class="section-label">2026–2027 · NC / Hills / Delta</h3>
+    <div class="card-list">${rows}</div>
+    ${
+      velvet
+        ? `<h3 class="section-label">Velvet archery</h3>
+           <div class="card season-card">
+             <div class="badges"><span class="badge">${esc(velvet.dates)}</span></div>
+             <div class="name">${esc(velvet.method)}</div>
+             <p class="meta">${esc(velvet.note || "")}</p>
+             ${landCells(velvet)}
+           </div>`
+        : ""
+    }
+    <p class="lede">${esc(SEASON_CARVEOUT_NOTE)}</p>
+  `;
+}
+
+function regsUsfsHtml() {
+  return `
+    <p class="lede">Forest Order ${esc(USFS_ORDER_ID)} highlights for National Forests in Mississippi, including Holly Springs. Same rules on the eRegulations NF hunting page.</p>
+    <div class="rule-list">${USFS_RULES.map(
+      (r) => `<div class="card rule-card"><h3>${esc(r.title)}</h3><p>${esc(r.body)}</p></div>`,
+    ).join("")}</div>
+  `;
+}
+
+function regsCwdHtml() {
+  return `
+    <p class="lede">${esc(CWD.zoneName)} covers Frank’s North MS counties. Carcass and feed rules are statewide for this zone — not HSNF-only.</p>
+    <h3 class="section-label">Whole counties</h3>
+    <div class="county-wrap">${CWD.wholeCounties.map((c) => `<span class="badge">${esc(c)}</span>`).join("")}</div>
+    <h3 class="section-label">Defined portions only</h3>
+    <div class="county-wrap">${CWD.partialCounties.map((c) => `<span class="badge quiet">${esc(c)}</span>`).join("")}</div>
+    <p class="lede">Coahoma, Pontotoc, Quitman, and Tunica are only in-zone where MDWFP draws the highway lines. Open the CWD page to confirm a spot on the edge.</p>
+    <h3 class="section-label">Carcasses</h3>
+    <div class="rule-list">${CWD.carcass.map((line) => `<div class="card rule-card"><p>${esc(line)}</p></div>`).join("")}</div>
+    <div class="hint-box">
+      <p class="kicker">Feeders</p>
+      <h3>Supplemental feeding banned</h3>
+      <p>${esc(CWD.feeding)}</p>
+    </div>
+  `;
+}
+
+function regsLandsHtml() {
+  return `
+    <p class="lede">${esc(NEARBY_LANDS.intro)}</p>
+    <div class="card-list">${NEARBY_LANDS.wmas
+      .map(
+        (w) => `<div class="card">
+          <div class="name">${esc(w.name)}</div>
+          <div class="meta">${esc(w.note)}</div>
+          <div class="badges"><span class="badge hint">WMA User Permit / check-in</span></div>
+        </div>`,
+      )
+      .join("")}</div>
+    <div class="warn-banner stack-gap">${esc(NEARBY_LANDS.pocketNote)}</div>
+  `;
+}
+
+function regsSmallHtml() {
+  return `
+    <div class="rule-list">
+      <div class="card rule-card">
+        <div class="badges"><span class="badge">${BAGS.turkey.residentSeason} / season</span></div>
+        <h3>${esc(SMALL_GAME.turkey.title)}</h3>
+        <p>${esc(SMALL_GAME.turkey.body)}</p>
+      </div>
+      <div class="card rule-card">
+        <div class="badges"><span class="badge">${BAGS.squirrel.fallDaily} / day fall</span></div>
+        <h3>${esc(SMALL_GAME.squirrel.title)}</h3>
+        <p>${esc(SMALL_GAME.squirrel.body)}</p>
+      </div>
+      <div class="card rule-card">
+        <div class="badges"><span class="badge">${BAGS.rabbit.daily} / day</span></div>
+        <h3>${esc(SMALL_GAME.rabbit.title)}</h3>
+        <p>${esc(SMALL_GAME.rabbit.body)}</p>
+      </div>
+    </div>
+  `;
+}
+
 function renderAbout() {
   setHeader("About", "On-device only", true);
   setTab("home");
@@ -624,11 +888,13 @@ function renderAbout() {
     <p class="kicker">Deadeye</p>
     <h2 class="page-title">Sight-in logger</h2>
     <div class="prose">
-      <p><strong>Deadeye</strong> is a phone-first hunting sight-in / scope-zero logger for Frank Mulkey. Crossbows, rifles, and red dots. Multi-scope profiles, range sessions with an optional target photo, and a documents pocket for a hunting license and land permits.</p>
+      <p><strong>Deadeye</strong> is a phone-first hunting sight-in / scope-zero logger for Frank Mulkey. Crossbows, rifles, and red dots. Multi-scope profiles, range sessions with an optional target photo, a documents pocket for a hunting license and land permits, and a static <strong>Local regs</strong> card for Holly Springs NF / North Mississippi.</p>
       <h2>Data stays on this device</h2>
-      <p>Profiles and notes live in this browser’s storage. Photos and PDFs live in IndexedDB on the phone. There is no account, no cloud sync, no share sheet, and no public link.</p>
+      <p>Profiles and notes live in this browser’s storage. Photos and PDFs live in IndexedDB on the phone. There is no account, no cloud sync, no share sheet, and no public link. Local regs are baked into the app shell — not live sync.</p>
       <h2>Documents pocket</h2>
       <p>Hunting license and land permits only (for example Butler Lake). Do not store a driver’s license or other wallet IDs.</p>
+      <h2>Local regs</h2>
+      <p>Unofficial ${esc(SEASON_YEAR)} field summary for Holly Springs National Forest and nearby North MS public land. Always verify MDWFP and USFS. No sharing features.</p>
       <h2>Traditional yardage hints</h2>
       <p>When you create a profile, Deadeye offers conventional ladders (crossbow 20–60, rifle BDC 100–500, red-dot 50-yard POA). They are labeled <em>suggested</em>. You can change every number.</p>
       <h2>Install</h2>
@@ -700,6 +966,10 @@ async function render() {
     } else if (name === "docs") {
       docDraft = null;
       renderDocs();
+    } else if (name === "regs" && id) {
+      renderRegsSection(id);
+    } else if (name === "regs") {
+      renderRegsHub();
     } else if (name === "about") {
       renderAbout();
     } else {
