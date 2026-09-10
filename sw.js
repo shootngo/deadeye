@@ -1,5 +1,5 @@
 /* Deadeye service worker — cache name unique vs Nickey / Stashr / Buck and Bacon / Nestor */
-const CACHE = "deadeye-v2";
+const CACHE = "deadeye-v3";
 const SHELL = [
   "./",
   "./index.html",

@@ -1,6 +1,6 @@
 # Deadeye
 
-Phone-first hunting **sight-in / scope-zero logger** PWA for **Frank Mulkey** ([shootngo](https://github.com/shootngo)). Same idea as Nickey / Buck and Bacon / Stashr: static GitHub Pages, Add to Home Screen, large tap targets, no login.
+Phone-first hunting **sight-in / scope-zero logger** PWA for **Frank Mulkey and Leo Mulkey** ([shootngo](https://github.com/shootngo)). Same idea as Nickey / Buck and Bacon / Stashr: static GitHub Pages, Add to Home Screen, large tap targets, no login.
 
 **Phase 1 is this repo.** Cloud sync, sharing, ballistics solvers, and Alexa are out of scope.
 
@@ -39,7 +39,7 @@ Open `http://localhost:8080/`.
 4. **Branch:** `main` · **folder:** `/ (root)`.
 5. Save. First publish takes a minute. `404.html` and `.nojekyll` are already in the root.
 
-PWA `start_url` / `scope` are relative (`./`), so Add to Home Screen works on that Pages path. App `id` is `/deadeye/` so it will not collide with Nickey, Nestor, Stashr, or Buck and Bacon. Service worker cache is `deadeye-v2`.
+PWA `start_url` / `scope` are relative (`./`), so Add to Home Screen works on that Pages path. App `id` is `/deadeye/` so it will not collide with Nickey, Nestor, Stashr, or Buck and Bacon. Service worker cache is `deadeye-v3`.
 
 On Android Chrome: menu → **Install app** / Add to Home screen. After the first visit the shell works offline.
 
@@ -58,7 +58,7 @@ npm test          # yardage hints + North MS regs bag-limit checks
 python3 -m http.server 8080
 ```
 
-No build step. Vanilla HTML/CSS/ES modules, service worker `deadeye-v2`. Static regs live in `js/regs-ms-north.js`.
+No build step. Vanilla HTML/CSS/ES modules, service worker `deadeye-v3`. Static regs live in `js/regs-ms-north.js`.
 
 ## Phase 1 — parked, do not build here
 

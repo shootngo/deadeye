@@ -13,7 +13,7 @@ export const DISCLAIMER =
 export const FOCUS = {
   title: "Holly Springs NF + North MS",
   lede:
-    "Frank’s woods: Holly Springs National Forest and nearby North Mississippi public land. Which deer table applies depends on the county under your boots — not the forest name on the map.",
+    "Frank and Leo’s woods: Holly Springs National Forest and nearby North Mississippi public land. Which deer table applies depends on the county under your boots — not the forest name on the map.",
 };
 
 export const SOURCES = [
@@ -46,7 +46,7 @@ export const SOURCES = [
 
 export const REQUIRED_SOURCE_URLS = SOURCES.map((s) => s.url);
 
-/** Deer Management Units that cover Frank’s Holly Springs / North MS area. */
+/** Deer Management Units that cover Frank and Leo’s Holly Springs / North MS area. */
 export const DMUS = {
   northCentral: {
     id: "north-central",
